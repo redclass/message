@@ -1,3 +1,17 @@
+<?
+    $db = new PDO("mysql:host=localhost;dbname=class","root","root");
+
+    $message = $db->prepare("SELECT * from message");
+    $message->execute();
+    $result = $message->fetchAll();
+
+    //var_dump($result);
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,22 +119,36 @@
         </h3>
         <div class="remark-item">
             <div class="remark-avatar"></div>
+            <?php foreach ($result as $key=>$value){
+        ?>
+
             <div class="remark-content">
                 <p class="remark-name">
-                    用户名
+                    <?php
+                    echo $value['username'];
+                    ?>
                 </p>
                 <p class="remark-text">
-                    留言内容
+                    <?php
+                    echo $value['msg'];
+                    ?>
                 </p>
                 <p class="remark-time">
-                    留言时间
+                    <?php
+                    date_default_timezone_set("PRC");
+                    $time = date("Y-m-d H:i;s",$value['time']);
+                    echo $time;
+                    ?>
                 </p>
             </div>
+            <?php
+            }
+            ?>
         </div>
     </section>
     <section class="remark-send">
-        <form action="" method="">
-            <textarea name="" value=""></textarea>
+        <form action="up.php" method="POST">
+            <textarea name="content" value=""></textarea>
             <input type="submit" value="提交">
         </form>
     </section>
