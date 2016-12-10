@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Remark</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        input {
+            outline: none;
+            border: none;
+        }
+        textarea {
+            margin: 0 auto;
+            display: block;
+            text-indent: 30px;
+            outline: none;
+            resize: none;
+            width: 500px;
+            height: 150px;
+            font-size: 15px;
+        }
+        header {
+            box-sizing: border-box;
+            padding: 0 25px;
+            background-color: #eaeff2;
+            height: 50px;
+            line-height: 50px;
+            font-size: 20px;
+        }
+        h3 {
+            padding-left: 15px;
+        }
+        .remark {
+            box-sizing: border-box;
+            height: 500px;
+            overflow: scroll;
+            padding: 20px 10px;
+        }
+        .remark-item {
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .remark-avatar {
+            float: left;
+            width: 50px;
+            height: 50px;
+            background-color: #f4f8fc;
+            border-radius: 50%;
+        }
+        .remark-content::before {
+            content: "";
+            position: absolute;
+            left: -20px;
+            top: 15px;
+            width: 0px;
+            height: 0px;
+            border: 10px solid transparent;
+            border-right-color: #f4f8fc;
+        }
+        .remark-content {
+            position: relative;
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 10px;
+            margin-left: 70px;
+            background-color: #f4f8fc;
+        }
+        .remark-content .remark-name {
+            font-size: 16px;
+        }
+        .remark-content .remark-text {
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        .remark-content .remark-time {
+            text-align: right;
+            font-size: 12px;
+        }
+        .remark-send {
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        input[type="submit"] {
+            display: block;
+            margin: 10px auto;
+            width: 200px;
+            height: 30px;
+            border-radius: 5px;
+            background-color: #0095dd;
+            color: #fff;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        留言板
+    </header>
+    <section class="remark">
+        <h3>
+           留言区域 
+        </h3>
+        <div class="remark-item">
+            <div class="remark-avatar"></div>
+            <div class="remark-content">
+                <p class="remark-name">
+                    用户名
+                </p>
+                <p class="remark-text">
+                    留言内容
+                </p>
+                <p class="remark-time">
+                    留言时间
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="remark-send">
+        <form action="" method="">
+            <textarea name="" value=""></textarea>
+            <input type="submit" value="提交">
+        </form>
+    </section>
+
+    <script type="text/javascript">
+        (function () {
+            function Ajax (options) {
+                var obj = {
+                    method: options.method || 'GET',
+                    url: options.url || '',
+                    data: options.data || '',
+                    success: options.success || function () {},
+                    error: options.error || function () {}
+                };
+
+                obj.method = obj.method.toUpperCase();
+
+                if (typeof obj.data === 'object') {
+                    var str = '';
+                    for (var key in obj.data) {
+                        str += key + '=' + obj.data[key] + '&';
+                    }
+                    obj.data = str.substring(0, str.length - 1);
+                }
+
+                var xhr = new XMLHttpRequest();
+                xhr.open(obj.method, obj.url, true);
+
+                if (obj.method === 'GET') {
+                    xhr.send(null);
+                } else {
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.send(obj.data);
+                }
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        obj.success.call(xhr, xhr.responseText);
+                    } else {
+                        obj.error();
+                    }
+                }
+            }
+
+            // Ajax ({
+            //     method: 'POST',
+            //     url: '',
+            //     data: {},
+            //     success: function (data) {
+            //         console.log(data);
+            //     }
+            // });
+
+            function createDom () {
+                var _frag = document.createDocumentFragment();
+                var _item = document.createElement('div');
+                var _avatar = document.createElement('div');
+                var _cont = document.createElement('div');
+                var _name = document.createElement('p');
+                var _text = document.createElement('p');
+                var _time = document.createElement('p');
+
+                _item.className = 'remark-item';
+                _avatar.className = 'remark-avatar';
+                _cont.className = 'remark-content';
+                _name.className = 'remark-name';
+                _text.className = 'remark-text';
+                _time.className = 'remark-time';
+
+                _name.textContent = 'mingzi';
+                _text.textContent = 'liuyan';
+                _time.textContent = 'shijian';
+
+                _cont.appendChild(_name);
+                _cont.appendChild(_text);
+                _cont.appendChild(_time);
+
+                _item.appendChild(_avatar);
+                _item.appendChild(_cont);
+
+                _frag.appendChild(_item);
+
+                document.querySelector('.remark').appendChild(_item);
+            }
+        })();
+    </script>
+</body>
+</html>
